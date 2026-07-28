@@ -261,6 +261,10 @@ class Script {
     // --- update on changes to the storage (storage.local.onChanged FF101)
     browser.storage.local.onChanged.addListener(e => this.onChanged(e));
 
+    // --- text editor dialog
+    this.dialog = document.querySelector('.scripts dialog');
+    [this.dialogButton, this.dialogTextarea] = this.dialog.children;
+
     // --- CustomValidity reset elements
     this.customNodes = [
       this.saveButton,
@@ -324,6 +328,12 @@ class Script {
 
       case 'upload':
         return this.uploadScript();
+
+      case 'textEditor':
+        return this.textEditorShow();
+
+      case 'back':
+        return this.textEditorClose();
     }
   }
 
@@ -973,6 +983,24 @@ class Script {
     })
     .then(() => App.notify(browser.i18n.getMessage('uploadSuccess')))
     .catch(e => alert(`fetch: ${e}`));
+  }
+
+  static textEditorShow() {
+    const text = Editor.get();
+    console.log(text);
+    if (!text.trim()) { return; }
+
+    this.dialogTextarea.value = text;
+    this.dialog.showModal();
+  }
+
+  static textEditorClose() {
+    const text = Editor.get();
+    const newText = this.dialogTextarea.value;
+    // check if text has changed
+    text !== newText && Editor.set(newText);
+    console.log(text !== newText);
+    this.dialog.close();
   }
 
   // ---------- import script ------------------------------
