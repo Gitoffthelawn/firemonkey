@@ -987,7 +987,6 @@ class Script {
 
   static textEditorShow() {
     const text = Editor.get();
-    console.log(text);
     if (!text.trim()) { return; }
 
     this.dialogTextarea.value = text;
@@ -999,7 +998,6 @@ class Script {
     const newText = this.dialogTextarea.value;
     // check if text has changed
     text !== newText && Editor.set(newText);
-    console.log(text !== newText);
     this.dialog.close();
   }
 
@@ -1166,7 +1164,7 @@ class Script {
 // ---------- /scripts -------------------------------------
 
 // ---------- import/export preferences --------------------
-document.getElementById('export').addEventListener('click', () => FS.export(pref));
+document.getElementById('export').addEventListener('click', () => FS.export(pref, true));
 document.getElementById('file').addEventListener('change', e => {
   FS.import(e).then(data => {
     if (!data) { return; }
